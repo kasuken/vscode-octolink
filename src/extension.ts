@@ -1,26 +1,49 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { ContextManager } from './contextManager';
+import { CommandHandler } from './commandHandler';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
+	console.log('Open on GitHub extension is activating...');
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "vscode-open-on-github" is now active!');
+	// Initialize context manager to detect GitHub repositories
+	await ContextManager.initialize();
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('vscode-open-on-github.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from Open on GitHub!');
+	// Register the main commands
+	const openFileCommand = vscode.commands.registerCommand(
+		'vscode-open-on-github.openFileOnGitHub',
+		CommandHandler.openFileOnGitHub
+	);
+
+	const openFileHistoryCommand = vscode.commands.registerCommand(
+		'vscode-open-on-github.openFileHistoryOnGitHub',
+		CommandHandler.openFileHistoryOnGitHub
+	);
+
+	// Register workspace change listeners to update context
+	const onDidChangeWorkspaceFolders = vscode.workspace.onDidChangeWorkspaceFolders(async () => {
+		await ContextManager.refresh();
 	});
 
-	context.subscriptions.push(disposable);
+	// Register file system watcher for .git directories to refresh context when git state changes
+	const gitWatcher = vscode.workspace.createFileSystemWatcher('**/.git/**');
+	const onGitChange = async () => {
+		await ContextManager.refresh();
+	};
+	
+	gitWatcher.onDidCreate(onGitChange);
+	gitWatcher.onDidDelete(onGitChange);
+
+	// Add all disposables to context
+	context.subscriptions.push(
+		openFileCommand,
+		openFileHistoryCommand,
+		onDidChangeWorkspaceFolders,
+		gitWatcher
+	);
+
+	console.log('Open on GitHub extension is now active!');
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() {
+	console.log('Open on GitHub extension is deactivating...');
+}

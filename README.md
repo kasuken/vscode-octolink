@@ -1,51 +1,65 @@
-# vscode-open-on-github README
+# Open on GitHub
 
-This is the README for your extension "vscode-open-on-github". After writing up a brief description, we recommend including the following sections.
+A VS Code extension that allows you to quickly open files in your GitHub repository directly from the Explorer context menu.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Right-click context menu**: Right-click any file in the Explorer and select "Open on GitHub" to open it in your browser
+- **File history access**: Right-click any file and select "Open File History on GitHub" to view the commit history for that specific file
+- **Command Palette access**: Use `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) and search for "Open on GitHub" or "Open File History on GitHub"
+- **Current branch support**: Opens the file at the current branch or commit (not always the default branch)
+- **Smart detection**: Only appears for files in GitHub repositories that are tracked by Git
+- **Multiple remote support**: Automatically selects the best remote (prefers `origin`)
 
-For example if there is an image subfolder under your extension project workspace:
+## Usage
 
-\!\[feature X\]\(images/feature-x.png\)
+1. **Context Menu**: Right-click any file in the VS Code Explorer and select:
+   - "Open on GitHub" - Opens the file content view
+   - "Open File History on GitHub" - Opens the commit history for that file
+2. **Command Palette**: Open the Command Palette (`Ctrl+Shift+P`) and run:
+   - "Open on GitHub" - Opens the currently active file
+   - "Open File History on GitHub" - Opens the history for the currently active file
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+The extension will:
+- Detect if the file is in a GitHub repository
+- Check if the file is tracked by Git
+- Determine the current branch or commit SHA
+- Open the file or its history in your default browser at the correct GitHub URL
+
+## Limitations
+
+- Only works with GitHub repositories (not GitLab, Bitbucket, etc.)
+- Only works with tracked files (files that have been committed to Git)
+- Only supports files, not directories
+- Requires Git to be available on your system PATH
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- Git must be installed and available on your system PATH
+- Your project must be a Git repository with at least one GitHub remote
+- Files must be tracked by Git (committed at least once)
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+This extension does not contribute any VS Code settings. It works automatically when the above requirements are met.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- Branch names with special characters may require URL encoding (handled automatically)
+- Large repositories may experience slight delays during git operations
+- Submodules are treated relative to their own root, not the parent repository
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
+Initial release of Open on GitHub extension:
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+- Added "Open on GitHub" context menu item in Explorer
+- Added Command Palette support
+- Support for SSH and HTTPS GitHub remotes
+- Automatic branch/commit detection
+- File tracking verification
 
 ---
 

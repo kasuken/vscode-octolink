@@ -3,21 +3,69 @@
   "displayName": "Open on GitHub",
   "description": "A short way to open a file on GitHub portal.",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kasuken/vscode-open-on-github.git"
+  },
+  "publisher": "emanuelebartolesi",
   "engines": {
     "vscode": "^1.104.0"
   },
   "categories": [
-    "Other"
+    "Programming Languages",
+    "Snippets"
   ],
-  "activationEvents": [],
+  "keywords": [
+    "github",
+    "open on github",
+    "repository",
+    "scm",
+    "version control",
+    "browse",
+    "file history",
+    "remote",
+    "web",
+    "git"
+  ],
+  "activationEvents": [
+    "workspaceContains:.git"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode-open-on-github.helloWorld",
-        "title": "Hello World"
+        "command": "vscode-open-on-github.openFileOnGitHub",
+        "title": "Open on GitHub"
+      },
+      {
+        "command": "vscode-open-on-github.openFileHistoryOnGitHub",
+        "title": "Open File History on GitHub"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "vscode-open-on-github.openFileOnGitHub",
+          "when": "openOnGithub.supported && resourceExtname != '' && !explorerResourceIsFolder",
+          "group": "navigation@10"
+        },
+        {
+          "command": "vscode-open-on-github.openFileHistoryOnGitHub",
+          "when": "openOnGithub.supported && resourceExtname != '' && !explorerResourceIsFolder",
+          "group": "navigation@11"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "vscode-open-on-github.openFileOnGitHub",
+          "when": "openOnGithub.supported"
+        },
+        {
+          "command": "vscode-open-on-github.openFileHistoryOnGitHub",
+          "when": "openOnGithub.supported"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
