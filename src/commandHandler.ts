@@ -264,4 +264,50 @@ export class CommandHandler {
             );
         }
     }
+
+        static async openRelatedPullRequest(uri?: vscode.Uri): Promise<void> {
+            try {
+                // Get the file URI - either from parameter or active editor
+                let fileUri: vscode.Uri | undefined = uri;
+                if (!fileUri && vscode.window.activeTextEditor) {
+                    fileUri = vscode.window.activeTextEditor.document.uri;
+                }
+                if (!fileUri) {
+                    vscode.window.showErrorMessage('No file selected or active in editor.');
+                    return;
+                }
+                if (fileUri.scheme !== 'file') {
+                    vscode.window.showErrorMessage('This command only works with local files.');
+                    return;
+                }
+                const filePath = fileUri.fsPath;
+                // Get git information
+                const gitInfo = await GitService.getGitInfo(filePath);
+                if (!gitInfo) {
+                    vscode.window.showErrorMessage('This file is not in a GitHub repository.');
+                    return;
+                }
+                const remote = GitService.getPreferredRemote(gitInfo.remotes);
+                if (!remote) {
+                    vscode.window.showErrorMessage('No GitHub remote found in this repository.');
+                    return;
+                }
+                if (!gitInfo.currentBranch) {
+                    vscode.window.showErrorMessage('Unable to determine current branch.');
+                    return;
+                }
+                // Build PR search URL for the branch
+                const prListUrl = `https://github.com/${remote.owner}/${remote.repo}/pulls?q=is%3Apr+is%3Aopen+head%3A${encodeURIComponent(gitInfo.currentBranch)}`;
+                // Open in browser
+                const opened = await vscode.env.openExternal(vscode.Uri.parse(prListUrl));
+                if (opened) {
+                    vscode.window.setStatusBarMessage(`Opened related pull requests for branch '${gitInfo.currentBranch}'`, 3000);
+                } else {
+                    vscode.window.showErrorMessage('Failed to open pull request list in browser.');
+                }
+            } catch (error) {
+                console.error('Error in openRelatedPullRequest:', error);
+                vscode.window.showErrorMessage(`Failed to open related pull request: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            }
+        }
 }
