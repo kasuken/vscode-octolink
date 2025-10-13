@@ -2,7 +2,7 @@
   "name": "vscode-octo-link",
   "displayName": "OktoLink",
   "description": "Jump from VS Code to GitHub in one click. 🐙",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "icon": "img/logo.png",
   "repository": {
     "type": "git",
@@ -37,11 +37,15 @@
     "commands": [
       {
         "command": "vscode-octo-link.openFileOnGitHub",
-        "title": "Open on GitHub"
+        "title": "Octolink - Open on GitHub"
       },
       {
         "command": "vscode-octo-link.openFileHistoryOnGitHub",
-        "title": "Open File History on GitHub"
+        "title": "Octolink - Open File History on GitHub"
+      },
+      {
+        "command": "vscode-octo-link.copyPermalinkToClipboard",
+        "title": "Octolink - Copy Permalink"
       }
     ],
     "menus": {
@@ -55,6 +59,11 @@
           "command": "vscode-octo-link.openFileHistoryOnGitHub",
           "when": "openOnGithub.supported && resourceExtname != '' && !explorerResourceIsFolder",
           "group": "navigation@11"
+        },
+        {
+          "command": "vscode-octo-link.copyPermalinkToClipboard",
+          "when": "openOnGithub.supported && resourceExtname != '' && !explorerResourceIsFolder",
+          "group": "navigation@12"
         }
       ],
       "commandPalette": [
@@ -64,6 +73,10 @@
         },
         {
           "command": "vscode-octo-link.openFileHistoryOnGitHub",
+          "when": "openOnGithub.supported"
+        },
+        {
+          "command": "vscode-octo-link.copyPermalinkToClipboard",
           "when": "openOnGithub.supported"
         }
       ]

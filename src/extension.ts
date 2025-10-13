@@ -10,13 +10,18 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Register the main commands
 	const openFileCommand = vscode.commands.registerCommand(
-		'vscode-open-on-github.openFileOnGitHub',
+		'vscode-octo-link.openFileOnGitHub',
 		CommandHandler.openFileOnGitHub
 	);
 
 	const openFileHistoryCommand = vscode.commands.registerCommand(
-		'vscode-open-on-github.openFileHistoryOnGitHub',
+		'vscode-octo-link.openFileHistoryOnGitHub',
 		CommandHandler.openFileHistoryOnGitHub
+	);
+
+	const copyPermalinkCommand = vscode.commands.registerCommand(
+		'vscode-octo-link.copyPermalinkToClipboard',
+		CommandHandler.copyPermalinkToClipboard
 	);
 
 	// Register workspace change listeners to update context
@@ -37,6 +42,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		openFileCommand,
 		openFileHistoryCommand,
+		copyPermalinkCommand,
 		onDidChangeWorkspaceFolders,
 		gitWatcher
 	);
