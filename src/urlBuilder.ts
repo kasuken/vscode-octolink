@@ -35,4 +35,19 @@ export class UrlBuilder {
         
         return `https://github.com/${remote.owner}/${remote.repo}/commits/${encodedRef}/${encodedPath}`;
     }
+
+    static buildPermalinkUrl(
+        remote: GitRemote,
+        filePath: string,
+        repoRoot: string,
+        sha: string
+    ): string {
+        const relativePath = path.relative(repoRoot, filePath)
+            .replace(/\\/g, '/'); // Normalize path separators for URLs
+        
+        const encodedSHA = encodeURIComponent(sha);
+        const encodedPath = relativePath.split('/').map(segment => encodeURIComponent(segment)).join('/');
+        
+        return `https://github.com/${remote.owner}/${remote.repo}/blob/${encodedSHA}/${encodedPath}`;
+    }
 }

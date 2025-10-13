@@ -181,4 +181,87 @@ export class CommandHandler {
             );
         }
     }
+
+    static async copyPermalinkToClipboard(uri?: vscode.Uri): Promise<void> {
+        try {
+            // Get the file URI - either from parameter or active editor
+            let fileUri: vscode.Uri | undefined = uri;
+            
+            if (!fileUri && vscode.window.activeTextEditor) {
+                fileUri = vscode.window.activeTextEditor.document.uri;
+            }
+
+            if (!fileUri) {
+                vscode.window.showErrorMessage('No file selected or active in editor.');
+                return;
+            }
+
+            // Only support file scheme
+            if (fileUri.scheme !== 'file') {
+                vscode.window.showErrorMessage('This command only works with local files.');
+                return;
+            }
+
+            const filePath = fileUri.fsPath;
+
+            // Check if file exists
+            try {
+                await vscode.workspace.fs.stat(fileUri);
+            } catch {
+                vscode.window.showErrorMessage('Selected file does not exist.');
+                return;
+            }
+
+            // Get git information
+            const gitInfo = await GitService.getGitInfo(filePath);
+            if (!gitInfo) {
+                vscode.window.showErrorMessage('This file is not in a GitHub repository.');
+                return;
+            }
+
+            // Check if file is tracked
+            const isTracked = await GitService.isFileTracked(filePath, gitInfo.root);
+            if (!isTracked) {
+                vscode.window.showErrorMessage('File is not tracked by Git.');
+                return;
+            }
+
+            // Get the preferred remote
+            const remote = GitService.getPreferredRemote(gitInfo.remotes);
+            if (!remote) {
+                vscode.window.showErrorMessage('No GitHub remote found in this repository.');
+                return;
+            }
+
+            // Ensure we have a commit SHA for the permalink
+            if (!gitInfo.currentSHA) {
+                vscode.window.showErrorMessage('Unable to determine current commit SHA.');
+                return;
+            }
+
+            // Build the permalink URL
+            const url = UrlBuilder.buildPermalinkUrl(
+                remote,
+                filePath,
+                gitInfo.root,
+                gitInfo.currentSHA
+            );
+
+            // Copy to clipboard
+            await vscode.env.clipboard.writeText(url);
+
+            // Show success message
+            const fileName = path.basename(filePath);
+            vscode.window.setStatusBarMessage(
+                `Copied permalink for ${fileName} to clipboard`,
+                3000
+            );
+
+        } catch (error) {
+            console.error('Error in copyPermalinkToClipboard:', error);
+            vscode.window.showErrorMessage(
+                `Failed to copy permalink: ${error instanceof Error ? error.message : 'Unknown error'}`
+            );
+        }
+    }
 }
