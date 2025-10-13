@@ -66,13 +66,6 @@ You can access these from:
 
 ---
 
-## 📸 Preview
-
-*(You can replace this with an animated GIF later)*  
-![Preview](media/demo.gif)
-
----
-
 ## 🧑‍💻 Contributing
 
 Contributions are more than welcome!  

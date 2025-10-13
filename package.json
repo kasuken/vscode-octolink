@@ -2,7 +2,7 @@
   "name": "vscode-octo-link",
   "displayName": "OktoLink",
   "description": "Jump from VS Code to GitHub in one click. 🐙",
-  "version": "0.0.3",
+  "version": "1.0.1",
   "icon": "img/logo.png",
   "repository": {
     "type": "git",
