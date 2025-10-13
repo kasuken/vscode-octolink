@@ -8,6 +8,7 @@
     "type": "git",
     "url": "https://github.com/kasuken/vscode-octolink.git"
   },
+  "license": "MIT",
   "publisher": "emanuelebartolesi",
   "engines": {
     "vscode": "^1.104.0"
