@@ -1,11 +1,12 @@
 {
-  "name": "vscode-open-on-github",
-  "displayName": "Open on GitHub",
-  "description": "A short way to open a file on GitHub portal.",
+  "name": "vscode-octo-link",
+  "displayName": "OktoLink",
+  "description": "Jump from VS Code to GitHub in one click. 🐙",
   "version": "0.0.1",
+  "icon": "img/logo.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kasuken/vscode-open-on-github.git"
+    "url": "https://github.com/kasuken/vscode-octolink.git"
   },
   "publisher": "emanuelebartolesi",
   "engines": {
@@ -34,34 +35,34 @@
   "contributes": {
     "commands": [
       {
-        "command": "vscode-open-on-github.openFileOnGitHub",
+        "command": "vscode-octo-link.openFileOnGitHub",
         "title": "Open on GitHub"
       },
       {
-        "command": "vscode-open-on-github.openFileHistoryOnGitHub",
+        "command": "vscode-octo-link.openFileHistoryOnGitHub",
         "title": "Open File History on GitHub"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "command": "vscode-open-on-github.openFileOnGitHub",
+          "command": "vscode-octo-link.openFileOnGitHub",
           "when": "openOnGithub.supported && resourceExtname != '' && !explorerResourceIsFolder",
           "group": "navigation@10"
         },
         {
-          "command": "vscode-open-on-github.openFileHistoryOnGitHub",
+          "command": "vscode-octo-link.openFileHistoryOnGitHub",
           "when": "openOnGithub.supported && resourceExtname != '' && !explorerResourceIsFolder",
           "group": "navigation@11"
         }
       ],
       "commandPalette": [
         {
-          "command": "vscode-open-on-github.openFileOnGitHub",
+          "command": "vscode-octo-link.openFileOnGitHub",
           "when": "openOnGithub.supported"
         },
         {
-          "command": "vscode-open-on-github.openFileHistoryOnGitHub",
+          "command": "vscode-octo-link.openFileHistoryOnGitHub",
           "when": "openOnGithub.supported"
         }
       ]
