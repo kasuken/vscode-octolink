@@ -52,6 +52,11 @@
           "command": "vscode-octo-link.openRelatedPullRequest",
           "title": "Octolink - Open Related Pull Request"
         }
+       ,
+        {
+          "command": "vscode-octo-link.openRepoDashboard",
+          "title": "Octolink - Open Repo Dashboard"
+        }
     ],
     "menus": {
       "explorer/context": [
@@ -76,6 +81,12 @@
             "when": "openOnGithub.supported && resourceExtname != '' && !explorerResourceIsFolder",
             "group": "navigation@13"
           }
+         ,
+          {
+            "command": "vscode-octo-link.openRepoDashboard",
+            "when": "openOnGithub.supported && resourceExtname != '' && !explorerResourceIsFolder",
+            "group": "navigation@14"
+          }
       ],
       "commandPalette": [
         {
@@ -93,6 +104,11 @@
          ,
           {
             "command": "vscode-octo-link.openRelatedPullRequest",
+            "when": "openOnGithub.supported"
+          }
+         ,
+          {
+            "command": "vscode-octo-link.openRepoDashboard",
             "when": "openOnGithub.supported"
           }
       ]

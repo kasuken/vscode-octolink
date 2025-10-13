@@ -310,4 +310,55 @@ export class CommandHandler {
                 vscode.window.showErrorMessage(`Failed to open related pull request: ${error instanceof Error ? error.message : 'Unknown error'}`);
             }
         }
+
+            static async openRepoDashboard(uri?: vscode.Uri): Promise<void> {
+                try {
+                    // Get the file URI - either from parameter or active editor
+                    let fileUri: vscode.Uri | undefined = uri;
+                    if (!fileUri && vscode.window.activeTextEditor) {
+                        fileUri = vscode.window.activeTextEditor.document.uri;
+                    }
+                    if (!fileUri) {
+                        vscode.window.showErrorMessage('No file selected or active in editor.');
+                        return;
+                    }
+                    if (fileUri.scheme !== 'file') {
+                        vscode.window.showErrorMessage('This command only works with local files.');
+                        return;
+                    }
+                    const filePath = fileUri.fsPath;
+                    // Get git information
+                    const gitInfo = await GitService.getGitInfo(filePath);
+                    if (!gitInfo) {
+                        vscode.window.showErrorMessage('This file is not in a GitHub repository.');
+                        return;
+                    }
+                    const remote = GitService.getPreferredRemote(gitInfo.remotes);
+                    if (!remote) {
+                        vscode.window.showErrorMessage('No GitHub remote found in this repository.');
+                        return;
+                    }
+                    // Quick pick for dashboard type
+                    const dashboard = await vscode.window.showQuickPick([
+                        { label: 'Issues', url: `https://github.com/${remote.owner}/${remote.repo}/issues` },
+                        { label: 'Actions', url: `https://github.com/${remote.owner}/${remote.repo}/actions` },
+                        { label: 'Discussions', url: `https://github.com/${remote.owner}/${remote.repo}/discussions` }
+                    ], {
+                        placeHolder: 'Select a dashboard to open'
+                    });
+                    if (!dashboard) {
+                        return;
+                    }
+                    // Open selected dashboard
+                    const opened = await vscode.env.openExternal(vscode.Uri.parse(dashboard.url));
+                    if (opened) {
+                        vscode.window.setStatusBarMessage(`Opened ${dashboard.label} dashboard`, 3000);
+                    } else {
+                        vscode.window.showErrorMessage(`Failed to open ${dashboard.label} dashboard.`);
+                    }
+                } catch (error) {
+                    console.error('Error in openRepoDashboard:', error);
+                    vscode.window.showErrorMessage(`Failed to open repo dashboard: ${error instanceof Error ? error.message : 'Unknown error'}`);
+                }
+            }
 }
