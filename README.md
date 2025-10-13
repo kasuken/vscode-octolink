@@ -5,7 +5,7 @@
 OctoLink is a Visual Studio Code extension that lets you instantly open your current file, line, or selection directly on GitHub — no manual browsing, no copy-paste URLs.  
 It automatically detects your repository, branch, and selection to build the exact GitHub link for you.
 
-![OctoLink Banner](img/OctoLink Banner.png)
+![OctoLink Banner](img/OctoLinkBanner.png)
 
 ---
 
