@@ -23,6 +23,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		'vscode-octo-link.copyPermalinkToClipboard',
 		CommandHandler.copyPermalinkToClipboard
 	);
+	
+	const openRelatedPullRequestCommand = vscode.commands.registerCommand(
+		'vscode-octo-link.openRelatedPullRequest',
+		CommandHandler.openRelatedPullRequest
+	);
 
 	// Register workspace change listeners to update context
 	const onDidChangeWorkspaceFolders = vscode.workspace.onDidChangeWorkspaceFolders(async () => {
@@ -43,6 +48,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		openFileCommand,
 		openFileHistoryCommand,
 		copyPermalinkCommand,
+        openRelatedPullRequestCommand,
 		onDidChangeWorkspaceFolders,
 		gitWatcher
 	);

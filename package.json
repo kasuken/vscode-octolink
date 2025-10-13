@@ -2,7 +2,7 @@
   "name": "vscode-octo-link",
   "displayName": "OktoLink",
   "description": "Jump from VS Code to GitHub in one click. 🐙",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "icon": "img/logo.png",
   "repository": {
     "type": "git",
@@ -47,6 +47,11 @@
         "command": "vscode-octo-link.copyPermalinkToClipboard",
         "title": "Octolink - Copy Permalink"
       }
+       ,
+        {
+          "command": "vscode-octo-link.openRelatedPullRequest",
+          "title": "Octolink - Open Related Pull Request"
+        }
     ],
     "menus": {
       "explorer/context": [
@@ -65,6 +70,12 @@
           "when": "openOnGithub.supported && resourceExtname != '' && !explorerResourceIsFolder",
           "group": "navigation@12"
         }
+         ,
+          {
+            "command": "vscode-octo-link.openRelatedPullRequest",
+            "when": "openOnGithub.supported && resourceExtname != '' && !explorerResourceIsFolder",
+            "group": "navigation@13"
+          }
       ],
       "commandPalette": [
         {
@@ -79,6 +90,11 @@
           "command": "vscode-octo-link.copyPermalinkToClipboard",
           "when": "openOnGithub.supported"
         }
+         ,
+          {
+            "command": "vscode-octo-link.openRelatedPullRequest",
+            "when": "openOnGithub.supported"
+          }
       ]
     }
   },
